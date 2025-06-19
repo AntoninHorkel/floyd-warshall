@@ -1,39 +1,41 @@
-# 1. Úvod do grafů
+# Grafové algoritmy: Teoretický přehled
 
+## 1. Základní terminologie grafů
 - **Definice grafu**:
-  - **Orientovaný**: Hrany mají směr (např. A -> B != B -> A)
-  - **Neorientovaný**: Hrany jsou obousměrné (A-B == B-A)
-  - **Ohodnocený**: Hrany mají váhu/cenu (např. vzdálenost, cena přenosu)
+  - **Orientovaný graf**: Hrany mají explicitní směr (A → B ≠ B → A)
+  - **Neorientovaný graf**: Hrany nemají směr (A-B ≡ B-A)
+  - **Ohodnocený graf**: Hrany mají přiřazenou váhu (např. vzdálenost, cena)
 
-- **Kostra grafu**: Podgraf, který spojuje všechny vrcholy bez cyklů. Minimální kostra = nejmenší možná suma vah.
+- **Kostra grafu**: Podgraf spojující všechny vrcholy bez cyklů. Minimální kostra minimalizuje součet vah hran.
 
-- **Reprezentace grafu**:
-  - **Matice sousednosti**: 2D pole, kde `matrix[i][j]` = váha hrany mezi `i` a `j` (nebo 0/∞).
-  - **Seznam sousedů**: Slovník/seznam, kde `adj_list[i]` obsahuje sousedy vrcholu `i` s jejich vahami.
+- **Reprezentace grafů**:
+  - **Matice sousednosti**: 2D pole kde `matrix[i][j]` udává váhu hrany z `i` do `j` (nebo speciální hodnotu pro neexistenci hrany)
+  - **Seznam sousedů**: Kolekce (slovník/seznam) kde `adj_list[i]` obsahuje dvojice `(soused, váha)`
 
-- **Příklady využití**:
-  - Navigace (nejkratší trasa), sociální sítě (vztahy), rozvrhování úkolů.
+- **Aplikační domény**:
+  - Navigace (optimalizace tras), analýza sítí (sociální, počítačové), projektové plánování
 
-# 2. Problém nejkratší cesty
+## 2. Problém nejkratší cesty
+- **Cíl**: Nalezení cesty mezi dvěma vrcholy s minimálním součtem vah hran
+- **Negativní váhy**: Může vést k nekonečnému snižování délky cest při existenci záporných cyklů. Některé algoritmy s nimi neumí pracovat.
 
-- **Nejkratší cesta**: Minimální suma vah hran mezi dvěma vrcholy.
-- **Negativní hrany**: Mohou způsobit nekonečné zkracování (záporné cykly). Některé algoritmy je neumí (Dijkstra).
+## 3. Algoritmy pro hledání nejkratších cest
 
-# 3. Přehled algoritmů
+### a) Dijkstrův algoritmus
+- **Princip**: Greedy přístup s prioritní frontou. V každém kroku expanduje vrchol s nejnižší aktuální vzdáleností
+- **Omezení**: Funguje pouze pro grafy bez záporných vah
+- **Časová složitost**: O((V + E) log V) s prioritní frontou
 
-## a) Dijkstrův algoritmus
-- **Princip**: Greedy přístup + prioritní fronta. Vždy expanduje nejbližší vrchol.
-- **Omezení**: Pouze nezáporné hrany.
-- **Složitost**: O((V+E) log V) s prioritní frontou.
+### b) Bellman-Fordův algoritmus
+- **Princip**: Iterativní relaxace všech hran. Vyžaduje |V|-1 iterací pro konvergenci
+- **Detekce záporných cyklů**: Možná po |V|-1 iteracích testem další relaxace
+- **Časová složitost**: O(V · E)
+- **Výhoda**: Zvládá grafy se zápornými vahami (bez záporných cyklů)
 
-## b) Bellman-Fordův algoritmus
-- **Princip**: Relaxace všech hran V-1 krát. Zvládne i negativní hrany.
-- **Detekce záporných cyklů**: Pokud po V-1 iteracích lze ještě relaxovat.
-- **Složitost**: O(V*E).
+### c) Floyd-Warshallův algoritmus
+- **Princip**: Dynamické programování řešící všechny páry vrcholů najednou
+- **Časová složitost**: O(V³)
+- **Vhodné použití**: Husté grafy nebo když je potřeba nejkratší cesty mezi všemi páry vrcholů
 
-## c) Floyd-Warshallův algoritmus
-- **Princip**: Dynamické programování. Počítá nejkratší cesty mezi všemi páry.
-- **Složitost**: O(V³). Vhodné pro malé grafy nebo všechny páry.
-
-# Praktická část (návrh)
-- **Algoritmus**: Floyd-Warshallův algoritmus
+## 4. Návrh praktického řešení
+- **Zvolený algoritmus**: Floyd-Warshallův algoritmus (pro řešení všech párů)
